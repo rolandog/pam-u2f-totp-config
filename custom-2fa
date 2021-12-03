@@ -1,0 +1,21 @@
+# What the following lines accomplish:
+#   Prompt for a U2F device, and to then press ENTER.
+#   In case the U2F device is known, prompt the user to press the tactile trigger.
+#   In case the U2F device is not know or present, prompt for a verification code from Google Authenticator.
+#   Allow users that are not configured to use U2F or Google Authenticator to log in.
+# If in need of debugging:
+#   sudo touch /var/log/pam_u2f.log
+#   add ' debug debug_file=/var/log/pam_u2f.log' to the end of the first and third auth lines
+#   inspect the log file
+#   sudo rm /var/log/pam_u2f.log
+# Sources:
+#   https://developers.yubico.com/pam-u2f/Manuals/pam_u2f.8.html
+#   https://github.com/google/google-authenticator-libpam/
+#   https://github.com/Yubico/pam-u2f
+#   https://modusmundi.com/2020/02/12/adding-u2f-to-your-login-in-linux/
+#   https://www.raczylo.com/blog/openvpn-with-yubikey-and-google-authenticator/
+#   https://support.yubico.com/support/solutions/articles/15000011356-ubuntu-linux-login-guide-u2f
+#   https://wpollock.com/AUnix2/PAM-Help.htm
+auth [success=1 new_authtok_reqd=ok ignore=ignore default=ignore] pam_u2f.so interactive userpresence=0 nouserok authfile=/etc/Yubico/u2f_keys
+auth [success=1 new_authtok_reqd=ok ignore=ignore default=bad]    pam_google_authenticator.so nullok
+auth required                                                     pam_u2f.so cue userpresence=1 nouserok authfile=/etc/Yubico/u2f_keys
