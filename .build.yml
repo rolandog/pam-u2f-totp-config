@@ -2,7 +2,7 @@ image: alpine/edge
 secrets:
   - af3888de-0580-42e3-86a8-69d9d97b70cf
 sources:
-  - https://git.sr.ht/~rolandog
+  - https://git.sr.ht/~rolandog/pam-u2f-totp-config
 tasks:
   - mirror-to-github: |
       echo -e "Host github.com\n    IdentityFile ~/.ssh/id_rsa\n    IdentitiesOnly yes\n    BatchMode yes\n" >> ~/.ssh/config
