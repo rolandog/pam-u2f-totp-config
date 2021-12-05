@@ -5,12 +5,15 @@ sources:
   - https://git.sr.ht/~rolandog/pam-u2f-totp-config
 tasks:
   - fetch-and-validate-github-key-fingerprint: |
-      ssh-keyscan -t rsa github.com > github_host
-      ssh-keygen -lf github_host > github_fingerprint
-      grep -R "nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8" github_fingerprint
-  - mirror-to-github: |
+      tmp_dir=$(mktemp -d -t ci-XXXXXXXXXX --tmpdir=~)
+      ssh-keyscan -t rsa github.com > $tmp_dir/github_host
+      ssh-keygen -lf $tmp_dir/github_host > $tmp_dir/github_fingerprint
+      grep -R "nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8" $tmp_dir/github_fingerprint
+  - add-github-host-to-ssh-config: |
       echo -e "Host github.com\n    IdentityFile ~/.ssh/id_rsa\n    IdentitiesOnly yes\n    BatchMode yes\n" >> ~/.ssh/config
-      cat github_host >> ~/.ssh/known_hosts
+      cat $tmp_dir/github_host >> ~/.ssh/known_hosts
+      rm -rf $tmp_dir
+  - mirror-to-github: |
       cd ~/pam-u2f-totp-config
       git remote add github git@github.com:rolandog/pam-u2f-totp-config.git
       git push --prune github +refs/remotes/origin/*:refs/heads/* +refs/tags/*:refs/tags/* main
