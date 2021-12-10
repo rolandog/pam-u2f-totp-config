@@ -193,7 +193,7 @@ Internet to try to grok rules that you wrote several months ago.
 
 * Copyright notice
 
-#+BEGIN_QUOTE
+#+BEGIN_VERSE
     custom-2fa
     Copyright 2021, Rolando Garza.
     License GPLv3+: GNU GPL version 3 or later,
@@ -202,7 +202,7 @@ Internet to try to grok rules that you wrote several months ago.
     There is NO WARRANTY, to the extent permitted by law.
 
     Written by Rolando Garza.
-#+END_QUOTE
+#+END_VERSE
 
 * TODO:
 - [-] Ask Yubico's pam-u2f developers if they could expand ${USER}
