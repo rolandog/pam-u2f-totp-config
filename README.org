@@ -4,38 +4,22 @@
 #+setupfile: ~/org/conf/setup-en-bib-a4.config
 #+filetags: :dotfiles:configuration:git:notes:management:
 
-#+begin_abstract
+* What is this?
 These Linux Pluggable Authentication Modules (Linux-PAM) configuration
 rules support using both "Universal 2nd Factor" (U2F) and "Time-based
 One-time Password" (TOTP) or "HMAC-based One-time Password" (HOTP) for
 "Two-Factor Authentication" (2FA) by using Google's
 =pam_google_authenticator.so= library and Yubico's =pam_u2f.so=
 library.
-#+end_abstract
-
-* Copyright notice
-
-#+BEGIN_QUOTE
-    custom-2fa
-    Copyright 2021, Rolando Garza.
-    License GPLv3+: GNU GPL version 3 or later,
-                    <https://gnu.org/licenses/gpl.html>.
-    This is free software: you are free to change and redistribute it.
-    There is NO WARRANTY, to the extent permitted by law.
-
-    Written by Rolando Garza.
-#+END_QUOTE
 
 * Usage
 Just include =@include custom-2fa= in one of your PAM rules.
-
 
 ** WARNING!
 
 Make sure you have several terminal emulators with root privileges
 open so that you can undo changes that would leave you without
 access.
-
 
 * About
 ** Linux-PAM configuration rules
@@ -75,7 +59,6 @@ TOTP/HOTP for 2FA by using =pam_google_authenticator.so= and
     verification code from Google Authenticator.
 - Allow users that are not configured to use U2F or TOTP/HOTP to log
   in.
-
 
 *** rule 1: request U2F key; press ENTER and detect key
 
@@ -208,6 +191,18 @@ Enable debug logging:
 Because, honestly, sometimes you don't want to be scouring through the
 Internet to try to grok rules that you wrote several months ago.
 
+* Copyright notice
+
+#+BEGIN_QUOTE
+    custom-2fa
+    Copyright 2021, Rolando Garza.
+    License GPLv3+: GNU GPL version 3 or later,
+                    <https://gnu.org/licenses/gpl.html>.
+    This is free software: you are free to change and redistribute it.
+    There is NO WARRANTY, to the extent permitted by law.
+
+    Written by Rolando Garza.
+#+END_QUOTE
 
 * TODO:
 - [-] Ask Yubico's pam-u2f developers if they could expand ${USER}

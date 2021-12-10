@@ -14,7 +14,7 @@
 Table of Contents
 _________________
 
-1. Copyright notice
+1. What is this?
 2. Usage
 .. 1. WARNING!
 3. About
@@ -26,27 +26,23 @@ _________________
 ..... 4. rule 3: if U2F key was inserted, request touch
 .. 3. Debugging & Troubleshooting
 4. Why did I include so much info and not just a README?
-5. TODO:
-6. References
+5. Copyright notice
+6. TODO:
+7. References
 
 
-These Linux Pluggable Authentication Modules (Linux-PAM) configuration
-rules support using both "Universal 2nd Factor" (U2F) and "Time-based
-One-time Password" (TOTP) or "HMAC-based One-time Password" (HOTP) for
-"Two-Factor Authentication" (2FA) by using Google's
-`pam_google_authenticator.so' library and Yubico's `pam_u2f.so' library.
 
 
-1 Copyright notice
-==================
 
-        custom-2fa Copyright 2021, Rolando Garza.  License GPLv3+:
-        GNU GPL version 3 or later,
-        <https://gnu.org/licenses/gpl.html>.  This is free
-        software: you are free to change and redistribute it.
-        There is NO WARRANTY, to the extent permitted by law.
+1 What is this?
+===============
 
-        Written by Rolando Garza.
+  These Linux Pluggable Authentication Modules (Linux-PAM) configuration
+  rules support using both "Universal 2nd Factor" (U2F) and "Time-based
+  One-time Password" (TOTP) or "HMAC-based One-time Password" (HOTP) for
+  "Two-Factor Authentication" (2FA) by using Google's
+  `pam_google_authenticator.so' library and Yubico's `pam_u2f.so'
+  library.
 
 
 2 Usage
@@ -279,7 +275,19 @@ One-time Password" (TOTP) or "HMAC-based One-time Password" (HOTP) for
   Internet to try to grok rules that you wrote several months ago.
 
 
-5 TODO:
+5 Copyright notice
+==================
+
+        custom-2fa Copyright 2021, Rolando Garza.  License GPLv3+:
+        GNU GPL version 3 or later,
+        <https://gnu.org/licenses/gpl.html>.  This is free
+        software: you are free to change and redistribute it.
+        There is NO WARRANTY, to the extent permitted by law.
+
+        Written by Rolando Garza.
+
+
+6 TODO:
 =======
 
   - [-] Ask Yubico's pam-u2f developers if they could expand ${USER}
@@ -289,7 +297,7 @@ One-time Password" (TOTP) or "HMAC-based One-time Password" (HOTP) for
     - [ ] contribute?
 
 
-6 References
+7 References
 ============
 
   - <http://www.linux-pam.org/Linux-PAM-html/sag-configuration.html>
