@@ -15,9 +15,11 @@ Table of Contents
 _________________
 
 1. What is this?
-2. Usage
+2. Why did you write this?
+3. Usage
+4. Installation
 .. 1. WARNING!
-3. About
+5. About
 .. 1. Linux-PAM configuration rules
 .. 2. These custom-2fa rules
 ..... 1. What is accomplished?
@@ -25,10 +27,10 @@ _________________
 ..... 3. rule 2: if no key was inserted, ask for TOTP token
 ..... 4. rule 3: if U2F key was inserted, request touch
 .. 3. Debugging & Troubleshooting
-4. Why did I include so much info and not just a README?
-5. Copyright notice
-6. TODO:
-7. References
+6. Why did I include so much info and not just a README?
+7. Copyright notice
+8. TODO:
+9. References
 
 
 
@@ -45,23 +47,88 @@ _________________
   library.
 
 
-2 Usage
+2 Why did you write this?
+=========================
+
+  Because I wanted to have a similar log-in workflow in my computers to
+  the 2FA workflow that some online services provide:
+
+  - Validate the user's password (part of `common-auth').
+  - Prompt for a U2F key if the user registered at least one.
+  - If the user doesn't have their key or hasn't registered one,
+    fallback to a TOTP/HTOP code from a TOTP/HTOP authenticator app.
+  - If the user doesn't have both their key, nor the TOTP/HTOP app
+    fallback to a rescue code (from the authenticator app).
+  - Succeed if the user hasn't registered any 2FA methods.
+
+  This allows one to introduce other family members or coworkers to a
+  2FA workflow, and it helps system administrators to reduce the risk of
+  account takeover by malicious actors because of weak passwords.
+
+
+3 Usage
 =======
 
-  Just include `@include custom-2fa' in one of your PAM rules.
+  ,----
+  | user@computer:~$ sudo echo "Hello, World!"
+  `----
+
+  And the expected workflow in the terminal is:
+
+  ,----
+  | [sudo] password for user: 
+  | insert key and/or press ENTER: 
+  | touch key: 
+  | Hello, World!
+  `----
+
+  This can also be set as a prompt when logging in (see Installation).
 
 
-2.1 WARNING!
+4 Installation
+==============
+
+  After following installation procedures on [how to install
+  pam_google_authenticator.so], and on [how to install pam_u2f.so], just
+  include `@include custom-2fa' in one of your PAM rules after the line
+  that reads `@include common-auth'; these rules are usually located in
+  `/etc/pam.d/'.  You may probably want to add them to the following
+  rules:
+
+  - `/etc/pam.d/sudo'
+  - `/etc/pam.d/gdm-password'
+  - `/etc/pam.d/login'
+
+  You may also want to place some comments, so you remember how you
+  configured your system.  I use the following format:
+
+  ,----
+  | # custom-2fa
+  | # - Prompts for FIDO2-capable U2F device
+  | # - If present, request touch of device
+  | # - Otherwise request a totp validation code
+  | # - Allow for users without 2FA to authenticate with password
+  | # note: see /etc/pam.d/custom-2fa for implementation details
+  | @include custom-2fa
+  `----
+
+
+[how to install pam_google_authenticator.so]
+<https://github.com/google/google-authenticator-libpam/>
+
+[how to install pam_u2f.so] <https://github.com/Yubico/pam-u2f>
+
+4.1 WARNING!
 ~~~~~~~~~~~~
 
   Make sure you have several terminal emulators with root privileges
   open so that you can undo changes that would leave you without access.
 
 
-3 About
+5 About
 =======
 
-3.1 Linux-PAM configuration rules
+5.1 Linux-PAM configuration rules
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   The files are made of lists of rules. Each rule is a space separated
@@ -90,7 +157,7 @@ _________________
         `/lib/x86_64-linux-gnu/security/')
 
 
-3.2 These custom-2fa rules
+5.2 These custom-2fa rules
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   These Linux-PAM configuration rules support using both U2F and
@@ -98,7 +165,7 @@ _________________
   `pam_u2f.so'.
 
 
-3.2.1 What is accomplished?
+5.2.1 What is accomplished?
 ---------------------------
 
   - Prompt for a U2F device, and to then press ENTER.
@@ -110,7 +177,7 @@ _________________
     in.
 
 
-3.2.2 rule 1: request U2F key; press ENTER and detect key
+5.2.2 rule 1: request U2F key; press ENTER and detect key
 ---------------------------------------------------------
 
   - management group type
@@ -162,7 +229,7 @@ _________________
   `----
 
 
-3.2.3 rule 2: if no key was inserted, ask for TOTP token
+5.2.3 rule 2: if no key was inserted, ask for TOTP token
 --------------------------------------------------------
 
   - management group type
@@ -199,7 +266,7 @@ _________________
   `----
 
 
-3.2.4 rule 3: if U2F key was inserted, request touch
+5.2.4 rule 3: if U2F key was inserted, request touch
 ----------------------------------------------------
 
   - management group type
@@ -245,7 +312,7 @@ _________________
   `----
 
 
-3.3 Debugging & Troubleshooting
+5.3 Debugging & Troubleshooting
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   Find which files use custom-2fa:
@@ -268,14 +335,14 @@ _________________
     - (remember to escape previous line breaks with " `\'")
 
 
-4 Why did I include so much info and not just a README?
+6 Why did I include so much info and not just a README?
 =======================================================
 
   Because, honestly, sometimes you don't want to be scouring through the
   Internet to try to grok rules that you wrote several months ago.
 
 
-5 Copyright notice
+7 Copyright notice
 ==================
 
         custom-2fa
@@ -288,7 +355,7 @@ _________________
         Written by Rolando Garza.
 
 
-6 TODO:
+8 TODO:
 =======
 
   - [-] Ask Yubico's pam-u2f developers if they could expand ${USER}
@@ -298,7 +365,7 @@ _________________
     - [ ] contribute?
 
 
-7 References
+9 References
 ============
 
   - <http://www.linux-pam.org/Linux-PAM-html/sag-configuration.html>

@@ -12,8 +12,63 @@ One-time Password" (TOTP) or "HMAC-based One-time Password" (HOTP) for
 =pam_google_authenticator.so= library and Yubico's =pam_u2f.so=
 library.
 
+* Why did you write this?
+Because I wanted to have a similar log-in workflow in my computers to
+the 2FA workflow that some online services provide:
+
+- Validate the user's password (part of =common-auth=).
+- Prompt for a U2F key if the user registered at least one.
+- If the user doesn't have their key or hasn't registered one,
+  fallback to a TOTP/HTOP code from a TOTP/HTOP authenticator app.
+- If the user doesn't have both their key, nor the TOTP/HTOP app
+  fallback to a rescue code (from the authenticator app).
+- Succeed if the user hasn't registered any 2FA methods.
+
+This allows one to introduce other family members or coworkers to a
+2FA workflow, and it helps system administrators to reduce the risk of
+account takeover by malicious actors because of weak passwords.
+
 * Usage
-Just include =@include custom-2fa= in one of your PAM rules.
+#+BEGIN_SRC bash :exports code :eval never :dir ~ :wrap SRC text
+user@computer:~$ sudo echo "Hello, World!"
+#+END_SRC
+
+And the expected workflow in the terminal is:
+
+#+BEGIN_SRC text
+[sudo] password for user: 
+insert key and/or press ENTER: 
+touch key: 
+Hello, World!
+#+END_SRC
+
+This can also be set as a prompt when logging in (see Installation).
+
+
+* Installation
+After following installation procedures on [[https://github.com/google/google-authenticator-libpam/][how to install
+pam_google_authenticator.so]], and on [[https://github.com/Yubico/pam-u2f][how to install pam_u2f.so]], just
+include =@include custom-2fa= in one of your PAM rules after the line
+that reads =@include common-auth=; these rules are usually located in
+=/etc/pam.d/=.  You may probably want to add them to the following
+rules:
+
+- =/etc/pam.d/sudo=
+- =/etc/pam.d/gdm-password=
+- =/etc/pam.d/login=
+
+You may also want to place some comments, so you remember how you
+configured your system.  I use the following format:
+
+#+begin_src text
+  # custom-2fa
+  # - Prompts for FIDO2-capable U2F device
+  # - If present, request touch of device
+  # - Otherwise request a totp validation code
+  # - Allow for users without 2FA to authenticate with password
+  # note: see /etc/pam.d/custom-2fa for implementation details
+  @include custom-2fa
+#+end_src
 
 ** WARNING!
 
