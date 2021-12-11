@@ -235,7 +235,7 @@ Enable debug logging:
   - if debug_file was specified:
     - inspect it, e.g.: =nano /var/log/pam_u2f.log=
     - remove it, e.g.: =sudo rm /var/log/pam_u2f.log=
-  - for =pam_googleauthenticator= (rule 2), output is on syslog:
+  - for =pam_google_authenticator= (rule 2), output is on syslog:
     - open shell and monitor with: =tail -f /var/log/auth.log=
     - in another shell: =sudo -k && sudo echo "Hello World!"=
 - for all rules (1, 2, and 3):
