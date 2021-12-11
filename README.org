@@ -24,7 +24,7 @@ the 2FA workflow that some online services provide:
   fallback to a rescue code (from the authenticator app).
 - Succeed if the user hasn't registered any 2FA methods.
 
-This allows one to introduce other family members or coworkers to a
+This allows one to introduce other family members or co-workers to a
 2FA workflow, and it helps system administrators to reduce the risk of
 account takeover by malicious actors because of weak passwords.
 
