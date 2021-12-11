@@ -43,11 +43,11 @@ This can also be set as a prompt when logging in (see Installation).
 
 ## Installation
 
-After following installation procedures on [how to install pam<sub>googleauthenticator</sub>.so](https://github.com/google/google-authenticator-libpam/), and on [how to install pam<sub>u2f</sub>.so](https://github.com/Yubico/pam-u2f), just
-include `@include custom-2fa` in one of your PAM rules after the line
-that reads `@include common-auth`; these rules are usually located in
-`/etc/pam.d/`. You may probably want to add them to the following
-rules:
+After following installation procedures on [how to install `pam_google_authenticator.so`,](https://github.com/google/google-authenticator-libpam/) and on [how to install `pam_u2f.so`,](https://github.com/Yubico/pam-u2f)
+just include `@include custom-2fa` in one of your PAM rules after the
+line that reads `@include common-auth`; these rules are usually
+located in `/etc/pam.d/`. You may probably want to add them to the
+following rules:
 
   - `/etc/pam.d/sudo`
   - `/etc/pam.d/gdm-password`
@@ -134,7 +134,7 @@ TOTP/HOTP for 2FA by using `pam_google_authenticator.so` and
         Jump over the N modules in the stack on success
   - module path
       - `pam_u2f.so`  
-        use Yubico's pam<sub>u2f</sub>
+        use Yubico's `pam_u2f`
   - module arguments
       - `authfile=/etc/2fa/u2f/u2f_mappings`  
         Sets the location of the
@@ -224,7 +224,7 @@ auth \
         new<sub>authtokreqd</sub>=ok ignore=ignore default=bad\]
   - module path
       - `pam_u2f.so`  
-        use Yubico's pam<sub>u2f</sub>
+        use Yubico's `pam_u2f`
   - module arguments
       - `authfile=/etc/2fa/u2f/u2f_mappings`  
         Sets the location of the
@@ -269,12 +269,12 @@ Enable debug logging:
       - `sudo touch /var/log/pam_u2f.log`
       - add "`debug_file=/var/log/pam_u2f.log`" as module arguments
   - inspect debug logs:
-      - for pam<sub>u2f</sub> debugging (rules 1 and 3), output is on stderr:
+      - for `pam_u2f` debugging (rules 1 and 3), output is on stderr:
           - `sudo -k && sudo echo "Hello World!"`
       - if debug<sub>file</sub> was specified:
           - inspect it, e.g.: `nano /var/log/pam_u2f.log`
           - remove it, e.g.: `sudo rm /var/log/pam_u2f.log`
-      - for pam<sub>googleauthenticator</sub> (rule 2), output is on syslog:
+      - for `pam_googleauthenticator` (rule 2), output is on syslog:
           - open shell and monitor with: `tail -f /var/log/auth.log`
           - in another shell: `sudo -k && sudo echo "Hello World!"`
   - for all rules (1, 2, and 3):
