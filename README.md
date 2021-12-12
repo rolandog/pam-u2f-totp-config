@@ -96,7 +96,7 @@ regarding each field:
     authenticate. Two types of syntax are used. Simple key word, and
     square-bracketed value=action pairs.
   - module-path  
-    full filename (begin with "/") of the PAM to be used
+    full filename (begin with `"/"`) of the PAM to be used
     or relative pathname from default location (which could be either
     `/lib/security/`, `/lib64/security/`, or
     `/lib/x86_64-linux-gnu/security/`)
@@ -139,7 +139,7 @@ TOTP/HOTP for 2FA by using `pam_google_authenticator.so` and
       - `authfile=/etc/2fa/u2f/u2f_mappings`  
         Sets the location of the
         file that holds the mappings of user names to keyHandles and user
-        keys; should have 0600 permissions
+        keys; should have `0600` permissions
       - `interactive`  
         Set to prompt a message and wait before testing
         the presence of a FIDO device. Recommended if your device doesn't
@@ -152,8 +152,8 @@ TOTP/HOTP for 2FA by using `pam_google_authenticator.so` and
         Specify the prompt
         to insert a U2F key and press ENTER; hint at TOTP option
       - `userpresence=0`  
-        If 1, request user presence during
-        authentication. If 0, do not request user presence during
+        If `1`, request user presence during
+        authentication. If `0`, do not request user presence during
         authentication. Otherwise, fallback to the authenticator's
         default behaviour.
 
@@ -220,8 +220,8 @@ auth \
         failure of such a PAM will ultimately lead to the
         PAM-API returning failure but only after the remaining stacked
         modules (for this service and type) have been invoked. This is a
-        shorthand for the following values: \[success=ok
-        new<sub>authtokreqd</sub>=ok ignore=ignore default=bad\]
+        shorthand for the following values: `[success=ok
+         new_authtok_reqd=ok ignore=ignore default=bad]`
   - module path
       - `pam_u2f.so`  
         use Yubico's `pam_u2f`
@@ -229,18 +229,18 @@ auth \
       - `authfile=/etc/2fa/u2f/u2f_mappings`  
         Sets the location of the
         file that holds the mappings of user names to keyHandles and user
-        keys; should have 0600 permissions
+        keys; should have `0600` permissions
       - `cue`  
         Set to prompt a message to remind to touch the device
       - `[cue_prompt=Touch key: ]`  
         Specify prompt to touch key
       - `nouserok`  
-        Set to enable authentication attempts to succeed even
-        if the user trying to authenticate is not found inside authfile or
-        if authfile is missing/malformed.
+        Set to enable authentication attempts to succeed
+        even if the user trying to authenticate is not found inside
+        authfile or if authfile is missing/malformed.
       - `userpresence=1`  
-        If 1, request user presence during
-        authentication. If 0, do not request user presence during
+        If `1`, request user presence during
+        authentication. If `0`, do not request user presence during
         authentication. Otherwise, fallback to the authenticator's
         default behaviour.
 
@@ -271,7 +271,7 @@ Enable debug logging:
   - inspect debug logs:
       - for `pam_u2f` debugging (rules 1 and 3), output is on stderr:
           - `sudo -k && sudo echo "Hello World!"`
-      - if debug<sub>file</sub> was specified:
+      - if `debug_file` was specified:
           - inspect it, e.g.: `nano /var/log/pam_u2f.log`
           - remove it, e.g.: `sudo rm /var/log/pam_u2f.log`
       - for `pam_google_authenticator` (rule 2), output is on syslog:
@@ -279,12 +279,14 @@ Enable debug logging:
           - in another shell: `sudo -k && sudo echo "Hello World!"`
   - for all rules (1, 2, and 3):
       - add "`debug`" as an additional module argument
-      - (remember to escape previous line breaks with " `\`")
+      - (remember to escape previous line breaks with "`\`")
 
 ## Why did I include so much info and not just a README?
 
-Because, honestly, sometimes you don't want to be scouring through the
-Internet to try to grok rules that you wrote several months ago.
+Well, ... why not both? Honestly, sometimes you don't want to be
+scouring through the Internet to try to grok rules that you wrote
+several months ago. So I decided to include most of this README in
+the actual source as comments.
 
 ## Copyright notice
 
@@ -301,7 +303,7 @@ Written by Rolando Garza.
 
   - \[-\] Ask Yubico's pam-u2f developers if they could expand ${USER}
     variable so that we could get something like:
-    authfile=/etc/2fa/u2f/${USER}/u2f<sub>mappings</sub>
+    `authfile=/etc/2fa/u2f/${USER}/u2f_mappings`
       - \[X\] see: <https://github.com/Yubico/pam-u2f/issues/218>
       - \[ \] contribute?
 
