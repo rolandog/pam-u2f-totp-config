@@ -42,8 +42,10 @@ touch key:
 Hello, World!
 #+END_SRC
 
-This can also be set as a prompt when logging in (see Installation).
+This can also be set as a prompt when logging in (see Installation):
 
+#+CAPTION: Example of 2FA prompt after password verification.
+file:gdm3-login-screenshot.png
 
 * Installation
 After following installation procedures on [[https://github.com/google/google-authenticator-libpam/][how to install
