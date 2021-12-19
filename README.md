@@ -68,7 +68,7 @@ remember how you configured your system. I use the following format:
 @include custom-2fa
 ```
 
-### WARNING\!
+### WARNING!
 
 Make sure you have several terminal emulators with root privileges
 open so that you can undo changes that would leave you without
@@ -91,7 +91,7 @@ Hello, World!
 
 This can also be set as a prompt when logging in (see Installation):
 
-<file:gdm3-login-screenshot.png>
+![Example of 2FA prompt after password verification.](./gdm3-login-screenshot.png "screenshot")
 
 ## About
 
@@ -322,7 +322,7 @@ the actual source as comments.
 custom-2fa  
 Copyright 2021, Rolando Garza.  
 License GPLv3+: GNU GPL version 3 or later,  
-                <https://gnu.org/licenses/gpl.html>.  
+                <https://gnu.org/licenses/gpl.html>.  
 This is free software: you are free to change and redistribute it.  
 There is NO WARRANTY, to the extent permitted by law.  
   

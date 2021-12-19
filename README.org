@@ -92,7 +92,8 @@ Hello, World!
 This can also be set as a prompt when logging in (see Installation):
 
 #+CAPTION: Example of 2FA prompt after password verification.
-file:gdm3-login-screenshot.png
+#+NAME: fig:screenshot
+[[./gdm3-login-screenshot.png]]
 
 * About
 ** Linux-PAM configuration rules
