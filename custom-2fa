@@ -12,42 +12,65 @@
 # Written by Rolando Garza.
 
 
-### Usage
+### Installation
 
-# Just include @include custom-2fa in one of your PAM rules.
+# After following installation procedures on how to install
+# =pam_google_authenticator.so=, and on how to install =pam_u2f.so=,
+# just include =@include custom-2fa= in one of your PAM rules after the
+# line that reads =@include common-auth=; these rules are usually
+# located in =/etc/pam.d/=.  You may probably want to add them to the
+# following rules:
+ 
+# - =/etc/pam.d/sudo=
+# - =/etc/pam.d/gdm-password=
+# - =/etc/pam.d/login=
+
+# You may also want to place some comments, so you remember how you
+# configured your system.  I use the following format (without =#=
+# before =@include custom-2fa=):
+
+# custom-2fa
+# - Prompts for FIDO2-capable U2F device
+# - If present, request touch of device
+# - Otherwise request a totp validation code
+# - Allow for users without 2FA to authenticate with password
+# note: see /etc/pam.d/custom-2fa for implementation details
+#@include custom-2fa
 
 
 ### WARNING
 
 # Make sure you have several terminal emulators with root privileges
 # open so that you can undo changes that would leave you without
-# access.
-
-
-### About the custom-2fa rules
-
-# These Linux-PAM configuration rules support using both U2F and
-# TOTP/HOTP for 2FA by using pam_google_authenticator.so and
-# pam_u2f.so.
+# superuser access.
 
 
 ### About Linux-PAM configuration rules
 
-# The files are made of lists of rules. Each rule is a space
-# separated collection of tokens:
-# : service type control module-path module-arguments
-# The files in /etc/pam.d/ lack the "service" field.  Some info
+# The files are made of lists of rules. Each rule is a space separated
+# collection of tokens:
+
+# =service type control module-path module-arguments=
+
+# The files in =/etc/pam.d/= lack the "service" field.  Some info
 # regarding each field:
 # - service :: usually carry the name of the service or name of a
 #   familiar application, like "login" and "sudo".
 # - type :: the management group that the rule corresponds to
 # - control :: indicates behaviour of PAM-API if module fails to
-#   authenticate.  Two types of syntax are used.  Simple key word,
-#   and square-bracketed value=action pairs.
-# - module-path :: full filename (begin with "/") of the PAM to be
+#   authenticate.  Two types of syntax are used:  simple key word, and
+#   square-bracketed value=action pairs.
+# - module-path :: full filename (begins with "=/=") of the PAM to be
 #   used or relative pathname from default location (which could be
-#   either /lib/security/, /lib64/security/, or 
-#   /lib/x86_64-linux-gnu/security/)
+#   either =/lib/security/=, =/lib64/security/=, or
+#   =/lib/x86_64-linux-gnu/security/=)
+
+
+### About these custom-2fa rules
+
+# These Linux-PAM configuration rules support using both U2F and
+# TOTP/HOTP for 2FA by using =pam_google_authenticator.so= and
+# =pam_u2f.so=.
 
 
 ### What is accomplished?
@@ -55,8 +78,8 @@
 # - Prompt for a U2F device, and to then press ENTER.
 #   - In case the U2F device is known, prompt the user to press the
 #     tactile trigger.
-#   - In case the U2F device is not known or present, prompt for a
-#     verification code from Google Authenticator.
+#   - In case the U2F device is not known or present, prompt for code
+#     for verification from TOTP/HOTP app (like Google Authenticator).
 # - Allow users that are not configured to use U2F or TOTP/HOTP
 #   to log in.
 
@@ -64,29 +87,29 @@
 ### rule 1: request U2F key; press ENTER and detect key
 
 # - management group type
-#   - auth :: module type that authenticates the user
+#   - =auth= :: module type that authenticates the user
 # - control values
-#   - default=ignore :: the module's return status will not
+#   - =default=ignore= :: the module's return status will not
 #     contribute to the return code the application obtains
-#   - ignore=ignore :: PAM module wants its result to be ignored
-#   - new_authtok_reqd=ok :: new authentication token is required
-#   - success=1 :: Jump over the N modules in the stack on success
+#   - =ignore=ignore= :: PAM module wants its result to be ignored
+#   - =new_authtok_reqd=ok= :: new authentication token is required
+#   - =success=1= :: Jump over the N modules in the stack on success
 # - module path
-#     pam_u2f.so :: use Yubico's pam_u2f
+#     - =pam_u2f.so= :: use Yubico's =pam_u2f=
 # - module arguments
-#   - authfile=/etc/2fa/u2f/u2f_mappings :: Sets the location of
-#     the file that holds the mappings of user names to keyHandles
-#     and user keys; should have 0600 permissions
-#   - interactive :: Set to prompt a message and wait before
-#     testing the presence of a FIDO device.  Recommended if your
-#     device doesn't have a tactile trigger
-#   - nouserok :: Set to enable authentication attempts to succeed
+#   - =authfile=/etc/2fa/u2f/u2f_mappings= :: Sets the location of the
+#     file that holds the mappings of user names to keyHandles and user
+#     keys; should have =0600= permissions
+#   - =interactive= :: Set to prompt a message and wait before testing
+#     the presence of a FIDO device.  Recommended if your device
+#     doesn't have a tactile trigger
+#   - =nouserok= :: Set to enable authentication attempts to succeed
 #     even if the user trying to authenticate is not found inside
 #     authfile or if authfile is missing/malformed
-#   - [prompt=insert key and/or press ENTER: ] :: Specify the prompt
+#   - =[prompt=insert key and/or press ENTER: ]= :: Specify the prompt
 #     to insert a U2F key and press ENTER; hint at TOTP option
-#   - userpresence=0 :: If 1, request user presence during
-#     authentication.  If 0, do not request user presence during
+#   - =userpresence=0= :: If =1=, request user presence during
+#     authentication.  If =0=, do not request user presence during
 #     authentication.  Otherwise, fallback to the authenticator's
 #     default behaviour.
 
@@ -103,22 +126,22 @@ auth \
 ### rule 2: if no key was inserted, ask for TOTP token
 
 # - management group type
-#   - auth :: module type that authenticates the user
+#   - =auth= :: module type that authenticates the user
 # - control values
-#   - default=bad :: should be thought of as indicative of the
+#   - =default=bad= :: should be thought of as indicative of the
 #     module failing
-#   - ignore=ignore :: PAM module wants its result to be ignored
-#   - new_authtok_reqd=ok :: new authentication token is required
-#   - success=1 :: Jump over the N modules in the stack on success
+#   - =ignore=ignore= :: PAM module wants its result to be ignored
+#   - =new_authtok_reqd=ok= :: new authentication token is required
+#   - =success=1= :: Jump over the N modules in the stack on success
 # - module path
-#   - pam_google_authenticator.so :: google-authenticator-libpam,
+#   - =pam_google_authenticator.so= :: google-authenticator-libpam,
 #     by Google, will be used
 # - module arguments
-#   - [authtok_prompt=Type in token: ] :: set token prompt
-#   - nullok :: OK if user doesn't have TOTP/HOTP 2FA rolled out
-#   - secret=/etc/2fa/totp/${USER}/.totp_secrets :: the
-#     non-standard location for the file holding the secrets; it
-#     should have 0600 permissions
+#   - =[authtok_prompt=Type in token: ]= :: set token prompt
+#   - =nullok= :: OK if user doesn't have TOTP/HOTP 2FA rolled out
+#   - =secret=/etc/2fa/totp/${USER}/.totp_secrets= :: the non-standard
+#     location for the file holding the secrets; it should have =0600=
+#     permissions
 
 auth \
     [success=1 new_authtok_reqd=ok ignore=ignore default=bad] \
@@ -131,26 +154,26 @@ auth \
 ### rule 3: if U2F key was inserted, request touch
 
 # - management group type
-#   - auth :: module type that authenticates the user
+#   - =auth= :: module type that authenticates the user
 # - control values
-#   - required :: failure of such a PAM will ultimately lead to the
-#     PAM-API returning failure but only after the remaining
-#     stacked modules (for this service and type) have been
-#     invoked.  This is a shorthand for the following values:
-#     [success=ok new_authtok_reqd=ok ignore=ignore default=bad]
+#   - =required= :: failure of such a PAM will ultimately lead to the
+#     PAM-API returning failure but only after the remaining stacked
+#     modules (for this service and type) have been invoked.  This is
+#     a shorthand for the following values:
+#     - =[success=ok new_authtok_reqd=ok ignore=ignore default=bad]=
 # - module path
-#     pam_u2f.so :: use Yubico's pam_u2f
+#   - =pam_u2f.so= :: use Yubico's =pam_u2f=
 # - module arguments
-#   - authfile=/etc/2fa/u2f/u2f_mappings :: Sets the location of
-#     the file that holds the mappings of user names to keyHandles
-#     and user keys; should have 0600 permissions
-#   - cue :: Set to prompt a message to remind to touch the device
-#   - [cue_prompt=Touch key: ] :: Specify prompt to touch key
-#   - nouserok :: Set to enable authentication attempts to succeed
+#   - =authfile=/etc/2fa/u2f/u2f_mappings= :: Sets the location of the
+#     file that holds the mappings of user names to keyHandles and user
+#     keys; should have =0600= permissions
+#   - =cue= :: Set to prompt a message to remind to touch the device
+#   - =[cue_prompt=Touch key: ]= :: Specify prompt to touch key
+#   - =nouserok= :: Set to enable authentication attempts to succeed
 #     even if the user trying to authenticate is not found inside
 #     authfile or if authfile is missing/malformed.
-#   - userpresence=1 :: If 1, request user presence during
-#     authentication.  If 0, do not request user presence during
+#   - =userpresence=1= :: If =1=, request user presence during
+#     authentication.  If =0=, do not request user presence during
 #     authentication.  Otherwise, fallback to the authenticator's
 #     default behaviour.
 
@@ -194,10 +217,10 @@ auth \
 
 ### TODO:
 
-# - [-] Ask Yubico's pam-u2f developers if they could expand ${USER}
-#   variable so that we could get something like:
+# - [-] Ask Yubico's pam-u2f developers if they could expand +${USER}+
+#   =%u= variable so that we could get something like:
 #   authfile=/etc/2fa/u2f/${USER}/u2f_mappings
-#   - [ ] see: https://github.com/Yubico/pam-u2f/issues/218
+#   - [X] see: https://github.com/Yubico/pam-u2f/issues/218
 #   - [ ] contribute?
 
 
@@ -207,4 +230,3 @@ auth \
 # https://github.com/google/google-authenticator-libpam/
 # https://github.com/Yubico/pam-u2f
 # https://refspecs.linuxfoundation.org/fhs.shtml
-

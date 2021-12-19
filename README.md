@@ -41,7 +41,7 @@ Hello, World!
 
 This can also be set as a prompt when logging in (see Installation):
 
-![Example of 2FA prompt after password verification.](gdm3-login-screenshot.png)
+<file:gdm3-login-screenshot.png>
 
 ## Installation
 
@@ -72,7 +72,7 @@ configured your system. I use the following format:
 
 Make sure you have several terminal emulators with root privileges
 open so that you can undo changes that would leave you without
-access.
+superuser access.
 
 ## About
 
@@ -81,9 +81,7 @@ access.
 The files are made of lists of rules. Each rule is a space separated
 collection of tokens:
 
-``` example
-service type control module-path module-arguments
-```
+`service type control module-path module-arguments`
 
 The files in `/etc/pam.d/` lack the "service" field. Some info
 regarding each field:
@@ -95,12 +93,12 @@ regarding each field:
     the management group that the rule corresponds to
   - control  
     indicates behaviour of PAM-API if module fails to
-    authenticate. Two types of syntax are used. Simple key word, and
+    authenticate. Two types of syntax are used: simple key word, and
     square-bracketed value=action pairs.
   - module-path  
-    full filename (begin with `"/"`) of the PAM to be used
-    or relative pathname from default location (which could be either
-    `/lib/security/`, `/lib64/security/`, or
+    full filename (begins with "`/`") of the PAM to be
+    used or relative pathname from default location (which could be
+    either `/lib/security/`, `/lib64/security/`, or
     `/lib/x86_64-linux-gnu/security/`)
 
 ### These custom-2fa rules
@@ -114,8 +112,8 @@ TOTP/HOTP for 2FA by using `pam_google_authenticator.so` and
   - Prompt for a U2F device, and to then press ENTER.
       - In case the U2F device is known, prompt the user to press the
         tactile trigger.
-      - In case the U2F device is not known or present, prompt for a
-        verification code from Google Authenticator.
+      - In case the U2F device is not known or present, prompt for code
+        for verification from TOTP/HOTP app (like Google Authenticator).
   - Allow users that are not configured to use U2F or TOTP/HOTP to log
     in.
 
@@ -198,7 +196,7 @@ auth \
         OK if user doesn't have TOTP/HOTP 2FA rolled out
       - `secret=/etc/2fa/totp/${USER}/.totp_secrets`  
         the non-standard
-        location for the file holding the secrets; it should have 0600
+        location for the file holding the secrets; it should have `0600`
         permissions
 
 <!-- end list -->
@@ -222,8 +220,8 @@ auth \
         failure of such a PAM will ultimately lead to the
         PAM-API returning failure but only after the remaining stacked
         modules (for this service and type) have been invoked. This is a
-        shorthand for the following values: `[success=ok
-         new_authtok_reqd=ok ignore=ignore default=bad]`
+        shorthand for the following values:
+          - `[success=ok new_authtok_reqd=ok ignore=ignore default=bad]`
   - module path
       - `pam_u2f.so`  
         use Yubico's `pam_u2f`
@@ -295,7 +293,7 @@ the actual source as comments.
 custom-2fa  
 Copyright 2021, Rolando Garza.  
 License GPLv3+: GNU GPL version 3 or later,  
-                <https://gnu.org/licenses/gpl.html>.  
+                <https://gnu.org/licenses/gpl.html>.  
 This is free software: you are free to change and redistribute it.  
 There is NO WARRANTY, to the extent permitted by law.  
   
@@ -303,8 +301,8 @@ Written by Rolando Garza.
 
 ## TODO:
 
-  - \[-\] Ask Yubico's pam-u2f developers if they could expand ${USER}
-    variable so that we could get something like:
+  - \[-\] Ask Yubico's pam-u2f developers if they could expand ~~${USER}~~
+    `%u` variable so that we could get something like:
     `authfile=/etc/2fa/u2f/${USER}/u2f_mappings`
       - \[X\] see: <https://github.com/Yubico/pam-u2f/issues/218>
       - \[ \] contribute?

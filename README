@@ -8,7 +8,7 @@
                           ____________________
 
 
-                               2021-12-03
+                               2021-12-19
 
 
 Table of Contents
@@ -124,7 +124,8 @@ _________________
 ~~~~~~~~~~~~
 
   Make sure you have several terminal emulators with root privileges
-  open so that you can undo changes that would leave you without access.
+  open so that you can undo changes that would leave you without
+  superuser access.
 
 
 5 About
@@ -136,10 +137,7 @@ _________________
   The files are made of lists of rules. Each rule is a space separated
   collection of tokens:
 
-  ,----
-  | service type control module-path module-arguments
-  `----
-
+  `service type control module-path module-arguments'
 
   The files in `/etc/pam.d/' lack the "service" field.  Some info
   regarding each field:
@@ -150,10 +148,10 @@ _________________
         the management group that the rule corresponds to
   control
         indicates behaviour of PAM-API if module fails to authenticate.
-        Two types of syntax are used.  Simple key word, and
+        Two types of syntax are used: simple key word, and
         square-bracketed value=action pairs.
   module-path
-        full filename (begin with `"/"') of the PAM to be used or
+        full filename (begins with "`/'") of the PAM to be used or
         relative pathname from default location (which could be either
         `/lib/security/', `/lib64/security/', or
         `/lib/x86_64-linux-gnu/security/')
@@ -173,8 +171,8 @@ _________________
   - Prompt for a U2F device, and to then press ENTER.
     - In case the U2F device is known, prompt the user to press the
       tactile trigger.
-    - In case the U2F device is not known or present, prompt for a
-      verification code from Google Authenticator.
+    - In case the U2F device is not known or present, prompt for code
+      for verification from TOTP/HOTP app (like Google Authenticator).
   - Allow users that are not configured to use U2F or TOTP/HOTP to log
     in.
 
@@ -256,7 +254,7 @@ _________________
           OK if user doesn't have TOTP/HOTP 2FA rolled out
     `secret=/etc/2fa/totp/${USER}/.totp_secrets'
           the non-standard location for the file holding the secrets; it
-          should have 0600 permissions
+          should have `0600' permissions
 
   ,----
   | auth \
@@ -279,8 +277,8 @@ _________________
           failure of such a PAM will ultimately lead to the PAM-API
           returning failure but only after the remaining stacked modules
           (for this service and type) have been invoked.  This is a
-          shorthand for the following values: `[success=ok
-          new_authtok_reqd=ok ignore=ignore default=bad]'
+          shorthand for the following values:
+          - `[success=ok new_authtok_reqd=ok ignore=ignore default=bad]'
   - module path
     `pam_u2f.so'
           use Yubico's `pam_u2f'
@@ -362,9 +360,9 @@ _________________
 8 TODO:
 =======
 
-  - [-] Ask Yubico's pam-u2f developers if they could expand ${USER}
-      variable so that we could get something like:
-      =authfile=/etc/2fa/u2f/${USER}/u2f_mappings=
+  - [-] Ask Yubico's pam-u2f developers if they could expand +${USER}+
+    `%u' variable so that we could get something like:
+    `authfile=/etc/2fa/u2f/${USER}/u2f_mappings'
     - [X] see: <https://github.com/Yubico/pam-u2f/issues/218>
     - [ ] contribute?
 
