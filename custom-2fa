@@ -74,11 +74,11 @@
 # - service :: usually carry the name of the service or name of a
 #   familiar application, like "login" and "sudo".
 # - type :: the management group that the rule corresponds to
-# - control :: indicates behaviour of PAM-API if module fails to
+# - control :: indicates behavior of PAM-API if module fails to
 #   authenticate.  Two types of syntax are used:  simple key word, and
 #   square-bracketed value=action pairs.
 # - module-path :: full filename (begins with "=/=") of the PAM to be
-#   used or relative pathname from default location (which could be
+#   used or relative path-name from default location (which could be
 #   either =/lib/security/=, =/lib64/security/=, or
 #   =/lib/x86_64-linux-gnu/security/=)
 
@@ -115,8 +115,8 @@
 #     - =pam_u2f.so= :: use Yubico's =pam_u2f=
 # - module arguments
 #   - =authfile=/etc/2fa/u2f/u2f_mappings= :: Sets the location of the
-#     file that holds the mappings of user names to keyHandles and user
-#     keys; should have =0600= permissions
+#     file that holds the mappings of user names to keyHandles and
+#     user keys; should have =0600= permissions
 #   - =interactive= :: Set to prompt a message and wait before testing
 #     the presence of a FIDO device.  Recommended if your device
 #     doesn't have a tactile trigger
@@ -128,7 +128,7 @@
 #   - =userpresence=0= :: If =1=, request user presence during
 #     authentication.  If =0=, do not request user presence during
 #     authentication.  Otherwise, fallback to the authenticator's
-#     default behaviour.
+#     default behavior.
 
 auth \
     [success=1 new_authtok_reqd=ok ignore=ignore default=ignore] \
@@ -156,7 +156,7 @@ auth \
 # - module arguments
 #   - =[authtok_prompt=Type in token: ]= :: set token prompt
 #   - =nullok= :: OK if user doesn't have TOTP/HOTP 2FA rolled out
-#   - =secret=/etc/2fa/totp/${USER}/.totp_secrets= :: the non-standard
+#   - =secret=/etc/2fa/totp/${USER}/.totp_secrets= :: the nonstandard
 #     location for the file holding the secrets; it should have =0600=
 #     permissions
 
@@ -182,8 +182,8 @@ auth \
 #   - =pam_u2f.so= :: use Yubico's =pam_u2f=
 # - module arguments
 #   - =authfile=/etc/2fa/u2f/u2f_mappings= :: Sets the location of the
-#     file that holds the mappings of user names to keyHandles and user
-#     keys; should have =0600= permissions
+#     file that holds the mappings of user names to keyHandles and
+#     user keys; should have =0600= permissions
 #   - =cue= :: Set to prompt a message to remind to touch the device
 #   - =[cue_prompt=Touch key: ]= :: Specify prompt to touch key
 #   - =nouserok= :: Set to enable authentication attempts to succeed
@@ -192,7 +192,7 @@ auth \
 #   - =userpresence=1= :: If =1=, request user presence during
 #     authentication.  If =0=, do not request user presence during
 #     authentication.  Otherwise, fallback to the authenticator's
-#     default behaviour.
+#     default behavior.
 
 auth \
     required \

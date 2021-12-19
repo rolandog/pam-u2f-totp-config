@@ -111,12 +111,12 @@ regarding each field:
   - type  
     the management group that the rule corresponds to
   - control  
-    indicates behaviour of PAM-API if module fails to
+    indicates behavior of PAM-API if module fails to
     authenticate. Two types of syntax are used: simple key word, and
     square-bracketed value=action pairs.
   - module-path  
     full filename (begins with "`/`") of the PAM to be
-    used or relative pathname from default location (which could be
+    used or relative path-name from default location (which could be
     either `/lib/security/`, `/lib64/security/`, or
     `/lib/x86_64-linux-gnu/security/`)
 
@@ -174,7 +174,7 @@ TOTP/HOTP for 2FA by using `pam_google_authenticator.so` and
         If `1`, request user presence during
         authentication. If `0`, do not request user presence during
         authentication. Otherwise, fallback to the authenticator's
-        default behaviour.
+        default behavior.
 
 <!-- end list -->
 
@@ -214,7 +214,7 @@ auth \
       - `nullok`  
         OK if user doesn't have TOTP/HOTP 2FA rolled out
       - `secret=/etc/2fa/totp/${USER}/.totp_secrets`  
-        the non-standard
+        the nonstandard
         location for the file holding the secrets; it should have `0600`
         permissions
 
@@ -261,7 +261,7 @@ auth \
         If `1`, request user presence during
         authentication. If `0`, do not request user presence during
         authentication. Otherwise, fallback to the authenticator's
-        default behaviour.
+        default behavior.
 
 <!-- end list -->
 
