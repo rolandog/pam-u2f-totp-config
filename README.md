@@ -311,9 +311,9 @@ Written by Rolando Garza.
 
 ## TODO:
 
-  - \[-\] Ask Yubico's pam-u2f developers if they could expand ~~${USER}~~
-    `%u` variable so that we could get something like:
-    `authfile=/etc/2fa/u2f/${USER}/u2f_mappings`
+  - \[-\] Ask Yubico's pam-u2f developers if they could expand `%u`
+    variable so that we could get something like:
+    `authfile=/etc/2fa/u2f/%u/u2f_mappings`
       - \[X\] see: <https://github.com/Yubico/pam-u2f/issues/218>
       - \[ \] contribute?
 
