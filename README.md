@@ -24,6 +24,56 @@ This allows one to introduce other family members or co-workers to a
 2FA workflow, and it helps system administrators to reduce the risk of
 account takeover by malicious actors because of weak passwords.
 
+## Installation
+
+Please make sure you have already met these two prerequisites:
+
+  - having installed and configured [`pam_google_authenticator.so`](https://github.com/google/google-authenticator-libpam/)
+  - having installed and configured [`pam_u2f.so`](https://github.com/Yubico/pam-u2f)
+
+Let's, for example, add the `custom-2fa` rules to `/etc/pam.d/sudo`:
+
+  - copy `custom-2fa` file into `/etc/pam.d/`:
+      - `sudo cp custom-2fa /etc/pam.d/`
+  - edit (and don't close until we verify it works) `/etc/pam.d/sudo`:
+      - `sudo nano /etc/pam.d/sudo`
+  - include `@include custom-2fa` after `@include common-auth` line, and
+    save file without exiting the editor or closing the terminal
+    emulator (see example below with included comments)
+  - in another terminal emulator window or tab, verify installation:
+      - `sudo -k && sudo echo "Hello World!"`
+      - if you were able to successfully authenticate, you may close both
+        windows
+      - if there was an error, see the Debugging section
+      - worst case scenario, you can comment the `@include custom-2fa`
+        line to disable `custom-2fa` in the editor that still has root
+        privileges that you totally didn't close.
+
+You may probably want to add `custom-2fa` to the following rule files:
+
+  - `/etc/pam.d/sudo`
+  - `/etc/pam.d/gdm-password`
+  - `/etc/pam.d/login`
+
+Additionally, you may also want to place some comments, so you
+remember how you configured your system. I use the following format:
+
+``` text
+# custom-2fa
+# - Prompts for FIDO2-capable U2F device
+# - If present, request touch of device
+# - Otherwise request a TOTP/HOTP validation code
+# - Allow for users without 2FA to authenticate with password
+# note: see /etc/pam.d/custom-2fa for implementation details
+@include custom-2fa
+```
+
+### WARNING\!
+
+Make sure you have several terminal emulators with root privileges
+open so that you can undo changes that would leave you without
+superuser access.
+
 ## Usage
 
 ``` bash
@@ -42,37 +92,6 @@ Hello, World!
 This can also be set as a prompt when logging in (see Installation):
 
 <file:gdm3-login-screenshot.png>
-
-## Installation
-
-After following installation procedures on [how to install `pam_google_authenticator.so`,](https://github.com/google/google-authenticator-libpam/) and on [how to install `pam_u2f.so`,](https://github.com/Yubico/pam-u2f)
-just include `@include custom-2fa` in one of your PAM rules after the
-line that reads `@include common-auth`; these rules are usually
-located in `/etc/pam.d/`. You may probably want to add them to the
-following rules:
-
-  - `/etc/pam.d/sudo`
-  - `/etc/pam.d/gdm-password`
-  - `/etc/pam.d/login`
-
-You may also want to place some comments, so you remember how you
-configured your system. I use the following format:
-
-``` text
-# custom-2fa
-# - Prompts for FIDO2-capable U2F device
-# - If present, request touch of device
-# - Otherwise request a TOTP/HOTP validation code
-# - Allow for users without 2FA to authenticate with password
-# note: see /etc/pam.d/custom-2fa for implementation details
-@include custom-2fa
-```
-
-### WARNING\!
-
-Make sure you have several terminal emulators with root privileges
-open so that you can undo changes that would leave you without
-superuser access.
 
 ## About
 

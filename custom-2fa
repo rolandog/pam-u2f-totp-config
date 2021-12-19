@@ -14,13 +14,30 @@
 
 ### Installation
 
-# After following installation procedures on how to install
-# =pam_google_authenticator.so=, and on how to install =pam_u2f.so=,
-# just include =@include custom-2fa= in one of your PAM rules after the
-# line that reads =@include common-auth=; these rules are usually
-# located in =/etc/pam.d/=.  You may probably want to add them to the
-# following rules:
+# Please make sure you have already met these two prerequisites:
+# - having installed and configured =pam_google_authenticator.so=
+# - having installed and configured =pam_u2f.so=
  
+# Let's, for example, add the =custom-2fa= rules to =/etc/pam.d/sudo=:
+# - copy =custom-2fa= file into =/etc/pam.d/=:
+#   - =sudo cp custom-2fa /etc/pam.d/=
+# - edit (and don't close until we verify it works) =/etc/pam.d/sudo=:
+#   - =sudo nano /etc/pam.d/sudo=
+# - include =@include custom-2fa= after =@include common-auth= line,
+#   and save file without exiting the editor or closing the terminal
+#   emulator (see example below with included comments)
+# - in another terminal emulator window or tab, verify installation:
+#   - =sudo -k && sudo echo "Hello World!"=
+#   - if you were able to successfully authenticate, you may close
+#     both windows
+#   - if there was an error, see the Debugging section
+#   - worst case scenario, you can comment the =@include custom-2fa=
+#     line to disable =custom-2fa= in the editor that still has root
+#     privileges that you totally didn't close.
+ 
+# You may probably want to add =custom-2fa= to the following rule
+# files:
+
 # - =/etc/pam.d/sudo=
 # - =/etc/pam.d/gdm-password=
 # - =/etc/pam.d/login=
