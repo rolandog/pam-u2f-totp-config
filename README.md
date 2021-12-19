@@ -62,7 +62,7 @@ configured your system. I use the following format:
 # custom-2fa
 # - Prompts for FIDO2-capable U2F device
 # - If present, request touch of device
-# - Otherwise request a totp validation code
+# - Otherwise request a TOTP/HOTP validation code
 # - Allow for users without 2FA to authenticate with password
 # note: see /etc/pam.d/custom-2fa for implementation details
 @include custom-2fa
