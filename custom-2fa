@@ -189,24 +189,35 @@ auth \
 
 ### Debugging & Troubleshooting
 
-# Find which files use custom-2fa:
-# - grep -irlE "^#?@include custom-2fa" /etc/pam.d/
-# Enable debug logging:
-# - for all rules (1, 2, and 3):
-#   - add "debug" as an additional module argument
-#   - (remember to escape previous line breaks with " \")
-# - if problems while logging in (rules 1 and 3):
-#   - sudo touch /var/log/pam_u2f.log
-#   - add "debug_file=/var/log/pam_u2f.log" as module arguments
-# - inspect debug logs:
-#   - for pam_u2f debugging (rules 1 and 3), output is on stderr:
-#     - sudo -k && sudo echo "Hello World!"
-#   - if debug_file was specified:
-#     - inspect it, e.g.: nano /var/log/pam_u2f.log
-#     - remove it, e.g.: sudo rm /var/log/pam_u2f.log
-#   - for pam_googleauthenticator (rule 2), output is on syslog:
-#     - open shell and monitor with: tail -f /var/log/auth.log
-#     - in another shell: sudo -k && sudo echo "Hello World!"
+# First, it may be useful to identify which files use custom-2fa:
+# =grep -rlE "^#?@include custom-2fa" /etc/pam.d/ --exclude=custom=
+
+# After that, try to pinpoint if the problem is with =pam_u2f= (rules
+# 1 and 3), or with =pam_google_authenticator= (rule 2).  Then, enable
+# debug logging, try authenticating again, and inspect the output.
+# Remember to escape previous line breaks with "=\=" when adding
+# module arguments to the PAM rules.
+
+# For =pam_u2f= (rules 1 and 3):
+# - Enable debug logging:
+#   - =sudo touch /var/log/pam_u2f.log=
+#   - add "=debug=" as an additional module argument
+#   - optionally, also add "=debug_file=/var/log/pam_u2f.log="
+# - Try authenticating again:
+#   - =sudo -k && sudo echo "Hello World!"=
+# - Inspect debug logs:
+#   - if =debug_file= was not specified, output will be on stderr
+#   - if =debug_file= was specified:
+#     - inspect it: =nano /var/log/pam_u2f.log=
+#     - remove it: =sudo rm /var/log/pam_u2f.log=
+
+# For =pam_google_authenticator= (rule 2):
+# - Enable debug logging
+#   - add "=debug=" as an additional module argument
+# - Begin monitoring syslog:
+#   - open shell and monitor with: =tail -f /var/log/auth.log=
+# - Try authenticating again:
+#   - in another shell: =sudo -k && sudo echo "Hello World!"=
 
 
 ### Why did I include so much info and not just a README?
