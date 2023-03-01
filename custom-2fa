@@ -3,7 +3,7 @@
 ### Copyright notice
 
 # custom-2fa
-# Copyright 2021, Rolando Garza.
+# Copyright 2023, Rolando Garza.
 # License GPLv3+: GNU GPL version 3 or later,
 #                 <https://gnu.org/licenses/gpl.html>.
 # This is free software: you are free to change and redistribute it.
@@ -114,15 +114,21 @@
 # - module path
 #     - =pam_u2f.so= :: use Yubico's =pam_u2f=
 # - module arguments
-#   - =authfile=/etc/2fa/u2f/u2f_mappings= :: Sets the location of the
-#     file that holds the mappings of user names to keyHandles and
+#   - =authfile=/etc/2fa/u2f/%u/u2f_mappings= :: Sets the location of
+#     the file that holds the mappings of user names to keyHandles and
 #     user keys; should have =0600= permissions
+#   - =expand= :: Enables variable expansion within the authfile path:
+#     =%u= is expanded to the local user name (=PAM_USER=) and =%%=
+#      is expanded to =%=.
 #   - =interactive= :: Set to prompt a message and wait before testing
 #     the presence of a FIDO device.  Recommended if your device
 #     doesn't have a tactile trigger
 #   - =nouserok= :: Set to enable authentication attempts to succeed
 #     even if the user trying to authenticate is not found inside
 #     authfile or if authfile is missing/malformed
+#   - =openasuser= :: Setuid to the authenticating user when opening
+#     the authfile.  Useful when the user's home is stored on an NFS
+#     volume mounted with the root_squash option.
 #   - =[prompt=insert key and/or press ENTER: ]= :: Specify the prompt
 #     to insert a U2F key and press ENTER; hint at TOTP option
 #   - =userpresence=0= :: If =1=, request user presence during
@@ -133,9 +139,11 @@
 auth \
     [success=1 new_authtok_reqd=ok ignore=ignore default=ignore] \
         pam_u2f.so \
-            authfile=/etc/2fa/u2f/u2f_mappings \
+            authfile=/etc/2fa/u2f/%u/u2f_mappings \
+            expand \
             interactive \
             nouserok \
+            openasuser \
             [prompt=insert key and/or press ENTER: ] \
             userpresence=0
 
@@ -181,14 +189,20 @@ auth \
 # - module path
 #   - =pam_u2f.so= :: use Yubico's =pam_u2f=
 # - module arguments
-#   - =authfile=/etc/2fa/u2f/u2f_mappings= :: Sets the location of the
-#     file that holds the mappings of user names to keyHandles and
+#   - =authfile=/etc/2fa/u2f/%u/u2f_mappings= :: Sets the location of
+#     the file that holds the mappings of user names to keyHandles and
 #     user keys; should have =0600= permissions
+#   - =expand= :: Enables variable expansion within the authfile path:
+#     =%u= is expanded to the local user name (=PAM_USER=) and =%%=
+#      is expanded to =%=.
 #   - =cue= :: Set to prompt a message to remind to touch the device
 #   - =[cue_prompt=Touch key: ]= :: Specify prompt to touch key
 #   - =nouserok= :: Set to enable authentication attempts to succeed
 #     even if the user trying to authenticate is not found inside
 #     authfile or if authfile is missing/malformed.
+#   - =openasuser= :: Setuid to the authenticating user when opening
+#     the authfile.  Useful when the user's home is stored on an NFS
+#     volume mounted with the root_squash option.
 #   - =userpresence=1= :: If =1=, request user presence during
 #     authentication.  If =0=, do not request user presence during
 #     authentication.  Otherwise, fallback to the authenticator's
@@ -197,10 +211,12 @@ auth \
 auth \
     required \
         pam_u2f.so \
-            authfile=/etc/2fa/u2f/u2f_mappings \
+            authfile=/etc/2fa/u2f/%u/u2f_mappings \
+            expand \
             cue \
             [cue_prompt=touch key: ] \
             nouserok \
+            openasuser \
             userpresence=1
 
 
@@ -245,11 +261,12 @@ auth \
 
 ### TODO:
 
-# - [-] Ask Yubico's pam-u2f developers if they could expand =%u=
+# - [X] Ask Yubico's pam-u2f developers if they could expand =%u=
 #   variable so that we could get something like:
 #   authfile=/etc/2fa/u2f/%u/u2f_mappings
 #   - [X] see: https://github.com/Yubico/pam-u2f/issues/218
-#   - [ ] contribute?
+#   - [X] +contribute?+
+#   - [X] test
 
 
 ### References
@@ -258,3 +275,4 @@ auth \
 # https://github.com/google/google-authenticator-libpam/
 # https://github.com/Yubico/pam-u2f
 # https://refspecs.linuxfoundation.org/fhs.shtml
+
