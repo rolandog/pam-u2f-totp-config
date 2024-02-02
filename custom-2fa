@@ -3,7 +3,7 @@
 ### Copyright notice
 
 # custom-2fa
-# Copyright 2023, Rolando Garza.
+# Copyright 2024, Rolando Garza.
 # License GPLv3+: GNU GPL version 3 or later,
 #                 <https://gnu.org/licenses/gpl.html>.
 # This is free software: you are free to change and redistribute it.
@@ -129,6 +129,9 @@
 #   - =openasuser= :: Setuid to the authenticating user when opening
 #     the authfile.  Useful when the user's home is stored on an NFS
 #     volume mounted with the root_squash option.
+#   - =origin=pam://HOSTNAME= :: Set the relying party ID for the
+#     FIDO authentication procedure. If no value is specified, the
+#      identifier "pam://$HOSTNAME" is used.
 #   - =[prompt=insert key and/or press ENTER: ]= :: Specify the prompt
 #     to insert a U2F key and press ENTER; hint at TOTP option
 #   - =userpresence=0= :: If =1=, request user presence during
@@ -144,6 +147,7 @@ auth \
             interactive \
             nouserok \
             openasuser \
+            origin=pam://HOSTNAME \
             [prompt=insert key and/or press ENTER: ] \
             userpresence=0
 
@@ -203,6 +207,9 @@ auth \
 #   - =openasuser= :: Setuid to the authenticating user when opening
 #     the authfile.  Useful when the user's home is stored on an NFS
 #     volume mounted with the root_squash option.
+#   - =origin=pam://HOSTNAME= :: Set the relying party ID for the
+#     FIDO authentication procedure. If no value is specified, the
+#      identifier "pam://$HOSTNAME" is used.
 #   - =userpresence=1= :: If =1=, request user presence during
 #     authentication.  If =0=, do not request user presence during
 #     authentication.  Otherwise, fallback to the authenticator's
@@ -217,6 +224,7 @@ auth \
             [cue_prompt=touch key: ] \
             nouserok \
             openasuser \
+            origin=pam://HOSTNAME \
             userpresence=1
 
 
@@ -267,6 +275,9 @@ auth \
 #   - [X] see: https://github.com/Yubico/pam-u2f/issues/218
 #   - [X] +contribute?+
 #   - [X] test
+# - [ ] Update README:
+  # - [ ] Document using older pam-u2f library (without %u)
+  # - [ ] Document of using origin=pam://HOSTNAME when changing hostname
 
 
 ### References
