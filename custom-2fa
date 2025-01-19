@@ -276,8 +276,8 @@ auth \
 #   - [X] +contribute?+
 #   - [X] test
 # - [ ] Update README:
-  # - [ ] Document using older pam-u2f library (without %u)
-  # - [ ] Document of using origin=pam://HOSTNAME when changing hostname
+#   - [ ] Document using older pam-u2f library (without %u)
+#   - [ ] Document of using origin=pam://HOSTNAME when changing hostname
 
 
 ### References
