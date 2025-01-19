@@ -132,7 +132,7 @@
 #     authfile or if authfile is missing/malformed
 #   - =openasuser= :: Setuid to the authenticating user when opening
 #     the authfile.  Useful when the user's home is stored on an NFS
-#     volume mounted with the root_squash option.
+#     volume mounted with the =root_squash= option.
 #   - =origin=pam://HOSTNAME= :: Set the relying party ID for the FIDO
 #     authentication procedure.  If no value is specified, the
 #     identifier =pam://$HOSTNAME= is used.
@@ -210,7 +210,7 @@ auth \
 #     authfile or if authfile is missing/malformed.
 #   - =openasuser= :: Setuid to the authenticating user when opening
 #     the authfile.  Useful when the user's home is stored on an NFS
-#     volume mounted with the root_squash option.
+#     volume mounted with the =root_squash= option.
 #   - =origin=pam://HOSTNAME= :: Set the relying party ID for the FIDO
 #     authentication procedure.  If no value is specified, the
 #     identifier =pam://$HOSTNAME= is used.
@@ -284,6 +284,7 @@ auth \
 # - [X] Update README:
 #   - [X] Document using newer pam-u2f library (with =%u=)
 #   - [X] Document using =origin=pam://HOSTNAME=
+# - [ ] Remove TODO section
 
 
 # * References

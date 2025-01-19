@@ -3,6 +3,7 @@
 #+date: [2025-01-19 zo]
 #+author: Rolando Garza
 #+filetags: :u2f:totp:hotp:custom:2fa:yubico:google:authenticator:
+#+options: ':nil toc:nil tags:nil ^:nil
 
 * Copyright notice                                                :copyright:
 :PROPERTIES:
@@ -108,13 +109,11 @@ superuser access.
 :PROPERTIES:
 :CUSTOM_ID: usage
 :END:
-#+BEGIN_SRC console :exports code :eval never :dir ~ :wrap SRC text
-  user@computer:~$ sudo echo "Hello, World!"
-#+END_SRC
 
-And the expected workflow in the terminal is:
+Here is an example expected workflow in the terminal:
 
-#+BEGIN_SRC text
+#+BEGIN_SRC console :eval never :exports code
+  user@computer:~$ sudo echo 'Hello, World!'
   [sudo] password for user:
   insert key and/or press ENTER:
   touch key:
@@ -211,7 +210,7 @@ TOTP/HOTP for 2FA by using =pam_google_authenticator.so= and
     authfile or if authfile is missing/malformed
   - =openasuser= :: Setuid to the authenticating user when opening the
     authfile.  Useful when the user's home is stored on an NFS volume
-    mounted with the root_squash option.
+    mounted with the =root_squash= option.
   - =origin=pam://HOSTNAME= :: Set the relying party ID for the FIDO
     authentication procedure.  If no value is specified, the
     identifier =pam://$HOSTNAME= is used.
@@ -297,7 +296,7 @@ TOTP/HOTP for 2FA by using =pam_google_authenticator.so= and
     authfile or if authfile is missing/malformed.
   - =openasuser= :: Setuid to the authenticating user when opening the
     authfile.  Useful when the user's home is stored on an NFS volume
-    mounted with the root_squash option.
+    mounted with the =root_squash= option.
   - =origin=pam://HOSTNAME= :: Set the relying party ID for the FIDO
     authentication procedure.  If no value is specified, the
     identifier =pam://$HOSTNAME= is used.
@@ -377,6 +376,12 @@ comments.
 - [X] Update README:
   - [X] Document using newer pam-u2f library (with =%u=)
   - [X] Document using =origin=pam://HOSTNAME=
+- [ ] Remove TODO section
+
+* Local variables                                  :local:variables:noexport:
+# Local Variables:
+# org-export-with-smart-quotes: nil
+# End:
 
 * References                                                     :references:
 :PROPERTIES:
