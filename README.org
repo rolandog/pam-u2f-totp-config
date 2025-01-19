@@ -10,7 +10,7 @@
 :CUSTOM_ID: copyright-notice
 :END:
 
-#+BEGIN_VERSE
+#+BEGIN_SRC text
   custom-2fa
   Copyright 2025, Rolando Garza.
   License GPLv3+: GNU GPL version 3 or later,
@@ -19,7 +19,7 @@
   There is NO WARRANTY, to the extent permitted by law.
 
   Written by Rolando Garza.
-#+END_VERSE
+#+END_SRC
 
 * What is this?                                                        :what:
 :PROPERTIES:

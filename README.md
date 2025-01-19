@@ -1,15 +1,15 @@
 # Copyright notice
 
-<p class="verse">
-custom-2fa<br />
-Copyright 2025, Rolando Garza.<br />
-License GPLv3+: GNU GPL version 3 or later,<br />
-&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;<https://gnu.org/licenses/gpl.html>.<br />
-This is free software: you are free to change and redistribute it.<br />
-There is NO WARRANTY, to the extent permitted by law.<br />
-<br />
-Written by Rolando Garza.<br />
-</p>
+```text
+custom-2fa
+Copyright 2025, Rolando Garza.
+License GPLv3+: GNU GPL version 3 or later,
+                <https://gnu.org/licenses/gpl.html>.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+Written by Rolando Garza.
+```
 
 
 # What is this?
