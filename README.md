@@ -220,7 +220,7 @@ auth \
 ```
 
 
-# Debugging & Troubleshooting
+# Debugging and Troubleshooting
 
 First, it may be useful to identify which files use custom-2fa: `grep -irlE "^#?@include custom-2fa" /etc/pam.d/ --exclude=custom`
 

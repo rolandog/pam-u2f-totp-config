@@ -319,9 +319,9 @@ TOTP/HOTP for 2FA by using =pam_google_authenticator.so= and
               userpresence=1
 #+END_SRC
 
-* Debugging & Troubleshooting                     :debugging:troubleshooting:
+* Debugging and Troubleshooting                   :debugging:troubleshooting:
 :PROPERTIES:
-:CUSTOM_ID: debugging--troubleshooting
+:CUSTOM_ID: debugging-and-troubleshooting
 :END:
 
 First, it may be useful to identify which files use custom-2fa: =grep
