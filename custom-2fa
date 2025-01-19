@@ -1,6 +1,6 @@
 #%PAM-1.0
 
-### Copyright notice
+# * Copyright notice
 
 # custom-2fa
 # Copyright 2025, Rolando Garza.
@@ -12,7 +12,7 @@
 # Written by Rolando Garza.
 
 
-### Installation
+# * Installation
 
 # Please make sure you have already met these two prerequisites:
 # - having installed and configured =pam_google_authenticator.so=
@@ -42,9 +42,9 @@
 # - =/etc/pam.d/gdm-password=
 # - =/etc/pam.d/login=
 
-# You may also want to place some comments, so you remember how you
-# configured your system.  I use the following format (without =#=
-# before =@include custom-2fa=):
+# Additionally, you may also want to place some comments so you
+# remember how you configured your system.  I use the following format
+# (without =#= before =@include custom-2fa=):
 
 # custom-2fa
 # - Prompts for FIDO2-capable U2F device
@@ -55,14 +55,16 @@
 #@include custom-2fa
 
 
-### WARNING
+# ** WARNING
 
 # Make sure you have several terminal emulators with root privileges
 # open so that you can undo changes that would leave you without
 # superuser access.
 
 
-### About Linux-PAM configuration rules
+# * About
+
+# ** Linux-PAM configuration rules
 
 # The files are made of lists of rules.  Each rule is a space
 # separated collection of tokens:
@@ -83,14 +85,14 @@
 #   =/lib/x86_64-linux-gnu/security/=)
 
 
-### About these custom-2fa rules
+# ** These custom-2fa rules
 
 # These Linux-PAM configuration rules support using both U2F and
 # TOTP/HOTP for 2FA by using =pam_google_authenticator.so= and
 # =pam_u2f.so=.
 
 
-### What is accomplished?
+# *** What is accomplished?
 
 # - Prompt for a U2F device, and to then press ENTER.
 #   - In case the U2F device is known, prompt the user to press the
@@ -101,7 +103,9 @@
 #   to log in.
 
 
-### rule 1: request U2F key; press ENTER and detect key
+# * The rules, explained
+
+# ** rule 1: request U2F key; press ENTER and detect key
 
 # - management group type
 #   - =auth= :: module type that authenticates the user
@@ -112,14 +116,14 @@
 #   - =new_authtok_reqd=ok= :: new authentication token is required
 #   - =success=1= :: Jump over the N modules in the stack on success
 # - module path
-#     - =pam_u2f.so= :: use Yubico's =pam_u2f=
+#   - =pam_u2f.so= :: use Yubico's =pam_u2f=
 # - module arguments
 #   - =authfile=/etc/2fa/u2f/%u/u2f_mappings= :: Sets the location of
 #     the file that holds the mappings of user names to keyHandles and
 #     user keys; should have =0600= permissions
 #   - =expand= :: Enables variable expansion within the authfile path:
 #     =%u= is expanded to the local user name (=PAM_USER=) and =%%=
-#      is expanded to =%=.
+#      is expanded to =%=
 #   - =interactive= :: Set to prompt a message and wait before testing
 #     the presence of a FIDO device.  Recommended if your device
 #     doesn't have a tactile trigger
@@ -129,9 +133,9 @@
 #   - =openasuser= :: Setuid to the authenticating user when opening
 #     the authfile.  Useful when the user's home is stored on an NFS
 #     volume mounted with the root_squash option.
-#   - =origin=pam://HOSTNAME= :: Set the relying party ID for the
-#     FIDO authentication procedure. If no value is specified, the
-#      identifier "pam://$HOSTNAME" is used.
+#   - =origin=pam://HOSTNAME= :: Set the relying party ID for the FIDO
+#     authentication procedure.  If no value is specified, the
+#     identifier =pam://$HOSTNAME= is used.
 #   - =[prompt=insert key and/or press ENTER: ]= :: Specify the prompt
 #     to insert a U2F key and press ENTER; hint at TOTP option
 #   - =userpresence=0= :: If =1=, request user presence during
@@ -152,7 +156,7 @@ auth \
             userpresence=0
 
 
-### rule 2: if no key was inserted, ask for TOTP token
+# ** rule 2: if no key was inserted, ask for TOTP token
 
 # - management group type
 #   - =auth= :: module type that authenticates the user
@@ -180,7 +184,7 @@ auth \
             secret=/etc/2fa/totp/${USER}/.totp_secrets
 
 
-### rule 3: if U2F key was inserted, request touch
+# ** rule 3: if U2F key was inserted, request touch
 
 # - management group type
 #   - =auth= :: module type that authenticates the user
@@ -197,8 +201,8 @@ auth \
 #     the file that holds the mappings of user names to keyHandles and
 #     user keys; should have =0600= permissions
 #   - =expand= :: Enables variable expansion within the authfile path:
-#     =%u= is expanded to the local user name (=PAM_USER=) and =%%=
-#      is expanded to =%=.
+#     =%u= is expanded to the local user name (=PAM_USER=) and =%%= is
+#     expanded to =%=.
 #   - =cue= :: Set to prompt a message to remind to touch the device
 #   - =[cue_prompt=Touch key: ]= :: Specify prompt to touch key
 #   - =nouserok= :: Set to enable authentication attempts to succeed
@@ -207,9 +211,9 @@ auth \
 #   - =openasuser= :: Setuid to the authenticating user when opening
 #     the authfile.  Useful when the user's home is stored on an NFS
 #     volume mounted with the root_squash option.
-#   - =origin=pam://HOSTNAME= :: Set the relying party ID for the
-#     FIDO authentication procedure. If no value is specified, the
-#      identifier "pam://$HOSTNAME" is used.
+#   - =origin=pam://HOSTNAME= :: Set the relying party ID for the FIDO
+#     authentication procedure.  If no value is specified, the
+#     identifier =pam://$HOSTNAME= is used.
 #   - =userpresence=1= :: If =1=, request user presence during
 #     authentication.  If =0=, do not request user presence during
 #     authentication.  Otherwise, fallback to the authenticator's
@@ -228,7 +232,7 @@ auth \
             userpresence=1
 
 
-### Debugging & Troubleshooting
+# * Debugging & Troubleshooting
 
 # First, it may be useful to identify which files use custom-2fa:
 # =grep -rlE "^#?@include custom-2fa" /etc/pam.d/ --exclude=custom=
@@ -261,29 +265,31 @@ auth \
 #   - in another shell: =sudo -k && sudo echo "Hello World!"=
 
 
-### Why did I include so much info and not just a README?
+# * Why did I include so much info and not just a README?
 
 # Because, honestly, sometimes you don't want to be scouring through
 # the Internet to try to grok rules that you wrote several months ago.
+# So I decided to include most of the README in the actual source as
+# comments.
 
 
-### TODO:
+# * TODO:
 
 # - [X] Ask Yubico's pam-u2f developers if they could expand =%u=
 #   variable so that we could get something like:
-#   authfile=/etc/2fa/u2f/%u/u2f_mappings
+#   =authfile=/etc/2fa/u2f/%u/u2f_mappings=
 #   - [X] see: https://github.com/Yubico/pam-u2f/issues/218
 #   - [X] +contribute?+
 #   - [X] test
-# - [ ] Update README:
-#   - [ ] Document using older pam-u2f library (without %u)
-#   - [ ] Document of using origin=pam://HOSTNAME when changing hostname
+# - [X] Update README:
+#   - [X] Document using newer pam-u2f library (with =%u=)
+#   - [X] Document using =origin=pam://HOSTNAME=
 
 
-### References
+# * References
 
-# http://www.linux-pam.org/Linux-PAM-html/sag-configuration.html
-# https://github.com/google/google-authenticator-libpam/
-# https://github.com/Yubico/pam-u2f
-# https://refspecs.linuxfoundation.org/fhs.shtml
+# - http://www.linux-pam.org/Linux-PAM-html/sag-configuration.html
+# - https://github.com/google/google-authenticator-libpam/
+# - https://github.com/Yubico/pam-u2f
+# - https://refspecs.linuxfoundation.org/fhs.shtml
 

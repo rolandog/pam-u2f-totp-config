@@ -81,9 +81,9 @@ You may probably want to add =custom-2fa= to the following rule files:
 - =/etc/pam.d/gdm-password=
 - =/etc/pam.d/login=
 
-Additionally, you may also want to place some comments, so you
-remember how you configured your system.  I use the following format
-(without =#= before =@include custom-2fa=):
+Additionally, you may also want to place some comments so you remember
+how you configured your system.  I use the following format (without
+=#= before =@include custom-2fa=):
 
 #+begin_src text
   # custom-2fa
@@ -176,7 +176,12 @@ TOTP/HOTP for 2FA by using =pam_google_authenticator.so= and
 - Allow users that are not configured to use U2F or TOTP/HOTP to log
   in.
 
-*** rule 1: request U2F key; press ENTER and detect key             :first:
+* The rules, explained                                          :explanation:
+:PROPERTIES:
+:CUSTOM_ID: the-rules-explained
+:END:
+
+** rule 1: request U2F key; press ENTER and detect key          :u2f:detect:
 :PROPERTIES:
 :CUSTOM_ID: rule-1-request-u2f-key-press-enter-and-detect-key
 :END:
@@ -190,17 +195,26 @@ TOTP/HOTP for 2FA by using =pam_google_authenticator.so= and
   - =new_authtok_reqd=ok= :: new authentication token is required
   - =success=1= :: Jump over the N modules in the stack on success
 - module path
-    - =pam_u2f.so= :: use Yubico's =pam_u2f=
+  - =pam_u2f.so= :: use Yubico's =pam_u2f=
 - module arguments
   - =authfile=/etc/2fa/u2f/u2f_mappings= :: Sets the location of the
     file that holds the mappings of user names to keyHandles and user
     keys; should have =0600= permissions
+  - =expand= :: Enables variable expansion within the authfile path:
+    =%u= is expanded to the local user name (=PAM_USER=) and =%%=
+     is expanded to =%=
   - =interactive= :: Set to prompt a message and wait before testing
     the presence of a FIDO device.  Recommended if your device doesn't
     have a tactile trigger
   - =nouserok= :: Set to enable authentication attempts to succeed
     even if the user trying to authenticate is not found inside
     authfile or if authfile is missing/malformed
+  - =openasuser= :: Setuid to the authenticating user when opening the
+    authfile.  Useful when the user's home is stored on an NFS volume
+    mounted with the root_squash option.
+  - =origin=pam://HOSTNAME= :: Set the relying party ID for the FIDO
+    authentication procedure.  If no value is specified, the
+    identifier =pam://$HOSTNAME= is used.
   - =[prompt=insert key and/or press ENTER: ]= :: Specify the prompt
     to insert a U2F key and press ENTER; hint at TOTP option
   - =userpresence=0= :: If =1=, request user presence during
@@ -212,14 +226,17 @@ TOTP/HOTP for 2FA by using =pam_google_authenticator.so= and
   auth \
       [success=1 new_authtok_reqd=ok ignore=ignore default=ignore] \
           pam_u2f.so \
-              authfile=/etc/2fa/u2f/u2f_mappings \
+              authfile=/etc/2fa/u2f/%u/u2f_mappings \
+              expand \
               interactive \
               nouserok \
+              openasuser \
+              origin=pam://HOSTNAME \
               [prompt=insert key and/or press ENTER: ] \
               userpresence=0
 #+END_SRC
 
-*** rule 2: if no key was inserted, ask for TOTP token             :second:
+** rule 2: if no key was inserted, ask for TOTP token      :totp:hotp:token:
 :PROPERTIES:
 :CUSTOM_ID: rule-2-if-no-key-was-inserted-ask-for-totp-token
 :END:
@@ -251,7 +268,7 @@ TOTP/HOTP for 2FA by using =pam_google_authenticator.so= and
               secret=/etc/2fa/totp/${USER}/.totp_secrets
 #+END_SRC
 
-*** rule 3: if U2F key was inserted, request touch                  :third:
+** rule 3: if U2F key was inserted, request touch                :u2f:touch:
 :PROPERTIES:
 :CUSTOM_ID: rule-3-if-u2f-key-was-inserted-request-touch
 :END:
@@ -270,11 +287,20 @@ TOTP/HOTP for 2FA by using =pam_google_authenticator.so= and
   - =authfile=/etc/2fa/u2f/u2f_mappings= :: Sets the location of the
     file that holds the mappings of user names to keyHandles and user
     keys; should have =0600= permissions
+  - =expand= :: Enables variable expansion within the authfile path:
+    =%u= is expanded to the local user name (=PAM_USER=) and =%%= is
+    expanded to =%=.
   - =cue= :: Set to prompt a message to remind to touch the device
   - =[cue_prompt=Touch key: ]= :: Specify prompt to touch key
   - =nouserok= :: Set to enable authentication attempts to succeed
     even if the user trying to authenticate is not found inside
     authfile or if authfile is missing/malformed.
+  - =openasuser= :: Setuid to the authenticating user when opening the
+    authfile.  Useful when the user's home is stored on an NFS volume
+    mounted with the root_squash option.
+  - =origin=pam://HOSTNAME= :: Set the relying party ID for the FIDO
+    authentication procedure.  If no value is specified, the
+    identifier =pam://$HOSTNAME= is used.
   - =userpresence=1= :: If =1=, request user presence during
     authentication.  If =0=, do not request user presence during
     authentication.  Otherwise, fallback to the authenticator's
@@ -284,14 +310,17 @@ TOTP/HOTP for 2FA by using =pam_google_authenticator.so= and
   auth \
       required \
           pam_u2f.so \
-              authfile=/etc/2fa/u2f/u2f_mappings \
+              authfile=/etc/2fa/u2f/%u/u2f_mappings \
+              expand \
               cue \
               [cue_prompt=touch key: ] \
               nouserok \
+              openasuser \
+              origin=pam://HOSTNAME \
               userpresence=1
 #+END_SRC
 
-** Debugging & Troubleshooting                   :debugging:troubleshooting:
+* Debugging & Troubleshooting                     :debugging:troubleshooting:
 :PROPERTIES:
 :CUSTOM_ID: debugging--troubleshooting
 :END:
@@ -330,20 +359,24 @@ For =pam_google_authenticator= (rule 2):
 :PROPERTIES:
 :CUSTOM_ID: why-did-i-include-so-much-info-and-not-just-a-readme
 :END:
-Well, ... why not both?  Honestly, sometimes you don't want to be
-scouring through the Internet to try to grok rules that you wrote
-several months ago.  So I decided to include most of this README in
-the actual source as comments.
+Because, honestly, sometimes you don't want to be scouring through the
+Internet to try to grok rules that you wrote several months ago.  So I
+decided to include most of the README in the actual source as
+comments.
 
 * TODO:                                                                :todo:
 :PROPERTIES:
 :CUSTOM_ID: todo
 :END:
-- [-] Ask Yubico's pam-u2f developers if they could expand =%u=
+- [X] Ask Yubico's pam-u2f developers if they could expand =%u=
   variable so that we could get something like:
   =authfile=/etc/2fa/u2f/%u/u2f_mappings=
   - [X] see: https://github.com/Yubico/pam-u2f/issues/218
-  - [ ] contribute?
+  - [X] +contribute?+
+  - [X] test
+- [X] Update README:
+  - [X] Document using newer pam-u2f library (with =%u=)
+  - [X] Document using =origin=pam://HOSTNAME=
 
 * References                                                     :references:
 :PROPERTIES:
