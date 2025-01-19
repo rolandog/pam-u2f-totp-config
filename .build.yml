@@ -8,7 +8,7 @@ tasks:
       tmp_dir=$(mktemp -d -p $HOME)
       ssh-keyscan -t rsa github.com > $tmp_dir/github_host
       ssh-keygen -lf $tmp_dir/github_host > $tmp_dir/github_fingerprint
-      grep -R "nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8" $tmp_dir/github_fingerprint
+      grep -R "uNiVztksCsDhcc0u9e8BujQXVUpKZIDTMczCvj3tD2s" $tmp_dir/github_fingerprint
       cat $tmp_dir/github_host >> ~/.ssh/known_hosts
       rm -rf $tmp_dir
       echo -e "Host github.com\n    IdentityFile ~/.ssh/id_rsa\n    IdentitiesOnly yes\n    BatchMode yes\n" >> ~/.ssh/config
