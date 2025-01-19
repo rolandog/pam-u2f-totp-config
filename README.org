@@ -66,7 +66,8 @@ You may probably want to add =custom-2fa= to the following rule files:
 - =/etc/pam.d/login=
 
 Additionally, you may also want to place some comments, so you
-remember how you configured your system.  I use the following format:
+remember how you configured your system.  I use the following format
+(without =#= before =@include custom-2fa=):
 
 #+begin_src text
   # custom-2fa
@@ -75,7 +76,7 @@ remember how you configured your system.  I use the following format:
   # - Otherwise request a TOTP/HOTP validation code
   # - Allow for users without 2FA to authenticate with password
   # note: see /etc/pam.d/custom-2fa for implementation details
-  @include custom-2fa
+  #@include custom-2fa
 #+end_src
 
 ** WARNING!                                                        :warning:
@@ -91,17 +92,17 @@ superuser access.
 :PROPERTIES:
 :CUSTOM_ID: usage
 :END:
-#+BEGIN_SRC sh :exports code :eval never :dir ~ :wrap SRC text
-user@computer:~$ sudo echo "Hello, World!"
+#+BEGIN_SRC console :exports code :eval never :dir ~ :wrap SRC text
+  user@computer:~$ sudo echo "Hello, World!"
 #+END_SRC
 
 And the expected workflow in the terminal is:
 
 #+BEGIN_SRC text
-[sudo] password for user: 
-insert key and/or press ENTER: 
-touch key: 
-Hello, World!
+  [sudo] password for user:
+  insert key and/or press ENTER:
+  touch key:
+  Hello, World!
 #+END_SRC
 
 This can also be set as a prompt when logging in (see Installation):
