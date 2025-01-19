@@ -76,7 +76,7 @@ open so that you can undo changes that would leave you without
 superuser access.
 
 * Usage                                                               :usage:
-#+BEGIN_SRC bash :exports code :eval never :dir ~ :wrap SRC text
+#+BEGIN_SRC sh :exports code :eval never :dir ~ :wrap SRC text
 user@computer:~$ sudo echo "Hello, World!"
 #+END_SRC
 
