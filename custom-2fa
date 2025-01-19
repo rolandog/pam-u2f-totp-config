@@ -19,11 +19,8 @@
 # - having installed and configured =pam_u2f.so=
  
 # Let's, for example, add the =custom-2fa= rules to =/etc/pam.d/sudo=:
-
 # - copy =custom-2fa= file into =/etc/pam.d/=:
-
 #   - =sudo cp custom-2fa /etc/pam.d/=
-
 # - edit (and don't close until we verify it works) =/etc/pam.d/sudo=:
 #   - =sudo nano /etc/pam.d/sudo=
 # - include =@include custom-2fa= after =@include common-auth= line,
