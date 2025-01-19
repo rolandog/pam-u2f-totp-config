@@ -98,7 +98,7 @@ This can also be set as a prompt when logging in (see Installation):
 * About                                                               :about:
 ** Linux-PAM configuration rules                    :linux:pam:config:rules:
 
-The files are made of lists of rules. Each rule is a space separated
+The files are made of lists of rules.  Each rule is a space separated
 collection of tokens:
 
 =service type control module-path module-arguments=
