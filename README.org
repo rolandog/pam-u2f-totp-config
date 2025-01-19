@@ -4,6 +4,22 @@
 #+author: Rolando Garza
 #+filetags: :u2f:totp:hotp:custom:2fa:yubico:google:authenticator:
 
+* Copyright notice                                                :copyright:
+:PROPERTIES:
+:CUSTOM_ID: copyright-notice
+:END:
+
+#+BEGIN_VERSE
+  custom-2fa
+  Copyright 2025, Rolando Garza.
+  License GPLv3+: GNU GPL version 3 or later,
+                  <https://gnu.org/licenses/gpl.html>.
+  This is free software: you are free to change and redistribute it.
+  There is NO WARRANTY, to the extent permitted by law.
+
+  Written by Rolando Garza.
+#+END_VERSE
+
 * What is this?                                                        :what:
 :PROPERTIES:
 :CUSTOM_ID: what-is-this
@@ -318,22 +334,6 @@ Well, ... why not both?  Honestly, sometimes you don't want to be
 scouring through the Internet to try to grok rules that you wrote
 several months ago.  So I decided to include most of this README in
 the actual source as comments.
-
-* Copyright notice                                                :copyright:
-:PROPERTIES:
-:CUSTOM_ID: copyright-notice
-:END:
-
-#+BEGIN_VERSE
-  custom-2fa
-  Copyright 2025, Rolando Garza.
-  License GPLv3+: GNU GPL version 3 or later,
-                  <https://gnu.org/licenses/gpl.html>.
-  This is free software: you are free to change and redistribute it.
-  There is NO WARRANTY, to the extent permitted by law.
-
-  Written by Rolando Garza.
-#+END_VERSE
 
 * TODO:                                                                :todo:
 :PROPERTIES:
