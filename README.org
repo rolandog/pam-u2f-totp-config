@@ -5,6 +5,9 @@
 #+filetags: :dotfiles:configuration:git:notes:management:
 
 * What is this?                                                        :what:
+:PROPERTIES:
+:CUSTOM_ID: what-is-this
+:END:
 These Linux Pluggable Authentication Modules (Linux-PAM) configuration
 rules support using both "Universal 2nd Factor" (U2F) and "Time-based
 One-time Password" (TOTP) or "HMAC-based One-time Password" (HOTP) for
@@ -13,6 +16,9 @@ One-time Password" (TOTP) or "HMAC-based One-time Password" (HOTP) for
 library.
 
 * Why did you write this?                                               :why:
+:PROPERTIES:
+:CUSTOM_ID: why-did-you-write-this
+:END:
 Because I wanted to have a similar log-in workflow in my computers to
 the 2FA workflow that some online services provide:
 
@@ -29,6 +35,9 @@ This allows one to introduce other family members or co-workers to a
 account takeover by malicious actors because of weak passwords.
 
 * Installation                                                 :installation:
+:PROPERTIES:
+:CUSTOM_ID: installation
+:END:
 Please make sure you have already met these two prerequisites:
 - having installed and configured [[https://github.com/google/google-authenticator-libpam/][=pam_google_authenticator.so=]]
 - having installed and configured [[https://github.com/Yubico/pam-u2f][=pam_u2f.so=]]
@@ -70,12 +79,18 @@ remember how you configured your system.  I use the following format:
 #+end_src
 
 ** WARNING!                                                        :warning:
+:PROPERTIES:
+:CUSTOM_ID: warning
+:END:
 
 Make sure you have several terminal emulators with root privileges
 open so that you can undo changes that would leave you without
 superuser access.
 
 * Usage                                                               :usage:
+:PROPERTIES:
+:CUSTOM_ID: usage
+:END:
 #+BEGIN_SRC sh :exports code :eval never :dir ~ :wrap SRC text
 user@computer:~$ sudo echo "Hello, World!"
 #+END_SRC
@@ -96,7 +111,13 @@ This can also be set as a prompt when logging in (see Installation):
 [[./gdm3-login-screenshot.png]]
 
 * About                                                               :about:
+:PROPERTIES:
+:CUSTOM_ID: about
+:END:
 ** Linux-PAM configuration rules                    :linux:pam:config:rules:
+:PROPERTIES:
+:CUSTOM_ID: linux-pam-configuration-rules
+:END:
 
 The files are made of lists of rules.  Each rule is a space separated
 collection of tokens:
@@ -117,12 +138,18 @@ regarding each field:
   =/lib/x86_64-linux-gnu/security/=)
 
 ** These custom-2fa rules                                 :custom:2fa:rules:
+:PROPERTIES:
+:CUSTOM_ID: these-custom-2fa-rules
+:END:
 
 These Linux-PAM configuration rules support using both U2F and
 TOTP/HOTP for 2FA by using =pam_google_authenticator.so= and
 =pam_u2f.so=.
 
 *** What is accomplished?                                         :results:
+:PROPERTIES:
+:CUSTOM_ID: what-is-accomplished
+:END:
 
 - Prompt for a U2F device, and to then press ENTER.
   - In case the U2F device is known, prompt the user to press the
@@ -133,6 +160,9 @@ TOTP/HOTP for 2FA by using =pam_google_authenticator.so= and
   in.
 
 *** rule 1: request U2F key; press ENTER and detect key             :first:
+:PROPERTIES:
+:CUSTOM_ID: rule-1-request-u2f-key-press-enter-and-detect-key
+:END:
 
 - management group type
   - =auth= :: module type that authenticates the user
@@ -173,6 +203,9 @@ TOTP/HOTP for 2FA by using =pam_google_authenticator.so= and
 #+END_SRC
 
 *** rule 2: if no key was inserted, ask for TOTP token             :second:
+:PROPERTIES:
+:CUSTOM_ID: rule-2-if-no-key-was-inserted-ask-for-totp-token
+:END:
 
 - management group type
   - =auth= :: module type that authenticates the user
@@ -202,6 +235,9 @@ TOTP/HOTP for 2FA by using =pam_google_authenticator.so= and
 #+END_SRC
 
 *** rule 3: if U2F key was inserted, request touch                  :third:
+:PROPERTIES:
+:CUSTOM_ID: rule-3-if-u2f-key-was-inserted-request-touch
+:END:
 
 - management group type
   - =auth= :: module type that authenticates the user
@@ -239,6 +275,9 @@ TOTP/HOTP for 2FA by using =pam_google_authenticator.so= and
 #+END_SRC
 
 ** Debugging & Troubleshooting                   :debugging:troubleshooting:
+:PROPERTIES:
+:CUSTOM_ID: debugging--troubleshooting
+:END:
 
 First, it may be useful to identify which files use custom-2fa: =grep
 -irlE "^#?@include custom-2fa" /etc/pam.d/ --exclude=custom=
@@ -271,12 +310,18 @@ For =pam_google_authenticator= (rule 2):
   - in another shell: =sudo -k && sudo echo "Hello World!"=
 
 * Why did I include so much info and not just a README?                 :tmi:
+:PROPERTIES:
+:CUSTOM_ID: why-did-i-include-so-much-info-and-not-just-a-readme
+:END:
 Well, ... why not both?  Honestly, sometimes you don't want to be
 scouring through the Internet to try to grok rules that you wrote
 several months ago.  So I decided to include most of this README in
 the actual source as comments.
 
 * Copyright notice                                                :copyright:
+:PROPERTIES:
+:CUSTOM_ID: copyright-notice
+:END:
 
 #+BEGIN_VERSE
     custom-2fa
@@ -290,6 +335,9 @@ the actual source as comments.
 #+END_VERSE
 
 * TODO:                                                                :todo:
+:PROPERTIES:
+:CUSTOM_ID: todo
+:END:
 - [-] Ask Yubico's pam-u2f developers if they could expand =%u=
   variable so that we could get something like:
   =authfile=/etc/2fa/u2f/%u/u2f_mappings=
@@ -297,6 +345,9 @@ the actual source as comments.
   - [ ] contribute?
 
 * References                                                     :references:
+:PROPERTIES:
+:CUSTOM_ID: references
+:END:
 - http://www.linux-pam.org/Linux-PAM-html/sag-configuration.html
 - https://github.com/google/google-authenticator-libpam/
 - https://github.com/Yubico/pam-u2f
