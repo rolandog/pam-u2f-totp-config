@@ -1,8 +1,8 @@
 #+title: custom-2fa
 #+subtitle: U2F and TOTP/HOTP 
-#+date: 2021-12-19
-#+setupfile: ~/org/conf/setup-en-bib-a4.config
-#+filetags: :dotfiles:configuration:git:notes:management:
+#+date: [2025-01-19 zo]
+#+author: Rolando Garza
+#+filetags: :u2f:totp:hotp:custom:2fa:yubico:google:authenticator:
 
 * What is this?                                                        :what:
 :PROPERTIES:
